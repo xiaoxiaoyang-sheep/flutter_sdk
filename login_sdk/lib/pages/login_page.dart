@@ -13,7 +13,7 @@
  * @Author: 赵晨炀 904852749@qq.com
  * @Date: 2024-06-13 21:45:34
  * @LastEditors: 赵晨炀 904852749@qq.com
- * @LastEditTime: 2024-06-15 18:59:46
+ * @LastEditTime: 2024-06-15 19:58:22
  * @FilePath: /login_sdk/lib/pages/login_page.dart
  * @Description: 
  * 
@@ -22,6 +22,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:login_sdk/dao/login_dao.dart';
+import 'package:login_sdk/utils/navigator_util.dart';
 import 'package:login_sdk/utils/padding_extension.dart';
 import 'package:login_sdk/utils/string_util.dart';
 import 'package:login_sdk/widgets/button_widget.dart';
@@ -133,8 +134,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await LoginDao.login(username: username!, password: password!);
       debugPrint('登录成功');
-      // todo goToHome
-    } catch(e) {
+      if (context.mounted) {
+        NavigatorUtil.goToHome(context);
+      }
+    } catch (e) {
       debugPrint(e.toString());
     }
   }

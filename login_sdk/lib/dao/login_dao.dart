@@ -26,7 +26,7 @@
  * @Author: 赵晨炀 904852749@qq.com
  * @Date: 2024-06-15 18:30:26
  * @LastEditors: 赵晨炀 904852749@qq.com
- * @LastEditTime: 2024-06-15 19:20:41
+ * @LastEditTime: 2024-06-15 22:04:45
  * @FilePath: /login_sdk/lib/dao/login_dao.dart
  * @Description: 
  * 
@@ -38,6 +38,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_hi_cache/flutter_hi_cache.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_sdk/utils/navigator_util.dart';
 
 import 'header_util.dart';
 
@@ -124,6 +125,8 @@ class LoginDao {
   static void logOut() {
     // 移除登录保存的信息
     HiCache.getInstance().remove(kUserInfo);
-    // todo goToLogin
+    NavigatorUtil.goToLogin();
   }
 }
+
+
