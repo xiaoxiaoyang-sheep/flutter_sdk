@@ -1,7 +1,7 @@
 name: login_sdk
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+# homepage:
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_hi_cache: ^0.0.1
+  http: ^1.2.1
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

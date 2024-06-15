@@ -13,7 +13,7 @@
  * @Author: 赵晨炀 904852749@qq.com
  * @Date: 2024-06-13 21:45:34
  * @LastEditors: 赵晨炀 904852749@qq.com
- * @LastEditTime: 2024-06-15 17:46:39
+ * @LastEditTime: 2024-06-15 18:59:46
  * @FilePath: /login_sdk/lib/pages/login_page.dart
  * @Description: 
  * 
@@ -21,10 +21,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:login_sdk/dao/login_dao.dart';
 import 'package:login_sdk/utils/padding_extension.dart';
 import 'package:login_sdk/utils/string_util.dart';
 import 'package:login_sdk/widgets/button_widget.dart';
 import 'package:login_sdk/widgets/input_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 登陆页
 class LoginPage extends StatefulWidget {
@@ -107,8 +109,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // todo
-  void _jumpRegistration() async {}
+  void _jumpRegistration() async {
+    var uri = Uri.parse(
+        'https://api.devio.org/uapi/swagger-ui.html#/Account/registrationUsingPost');
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      debugPrint('Could not launch $uri');
+    }
+  }
 
   void _checkInput() {
     bool enable;
@@ -122,6 +129,13 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  // todo
-  _login(BuildContext context) {}
+  _login(BuildContext context) async {
+    try {
+      await LoginDao.login(username: username!, password: password!);
+      debugPrint('登录成功');
+      // todo goToHome
+    } catch(e) {
+      debugPrint(e.toString());
+    }
+  }
 }
