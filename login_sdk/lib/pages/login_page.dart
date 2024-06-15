@@ -13,19 +13,18 @@
  * @Author: 赵晨炀 904852749@qq.com
  * @Date: 2024-06-13 21:45:34
  * @LastEditors: 赵晨炀 904852749@qq.com
- * @LastEditTime: 2024-06-15 17:32:23
+ * @LastEditTime: 2024-06-15 17:46:39
  * @FilePath: /login_sdk/lib/pages/login_page.dart
  * @Description: 
  * 
  * Copyright (c) 2024 by 赵晨炀, All Rights Reserved. 
  */
 
-
 import 'package:flutter/material.dart';
+import 'package:login_sdk/utils/padding_extension.dart';
 import 'package:login_sdk/utils/string_util.dart';
 import 'package:login_sdk/widgets/button_widget.dart';
 import 'package:login_sdk/widgets/input_widget.dart';
-
 
 /// 登陆页
 class LoginPage extends StatefulWidget {
@@ -56,24 +55,35 @@ class _LoginPageState extends State<LoginPage> {
       right: 25,
       child: ListView(
         children: [
-          const Padding(padding: EdgeInsets.only(top: 100)),
+          100.paddingHeight,
           const Text(
             'ChartGPT',
             style: TextStyle(fontSize: 26, color: Colors.white),
           ),
-           const Padding(padding: EdgeInsets.only(top: 40)),
-          InputWidget(hint: '请输入账号', onChanged: (text) {
-            username = text;
-            _checkInput();
-          },),
-           const Padding(padding: EdgeInsets.only(top: 40)),
-          InputWidget(hint: '请输入密码', obscureText: true, onChanged: (text) {
-            password = text;
-            _checkInput();
-          },),
-           const Padding(padding: EdgeInsets.only(top: 45)),
-          ButtonWidget(title: '登陆', enable: loginEnable, onPressed: () => _login(context),),
-           const Padding(padding: EdgeInsets.only(top: 15)),
+          40.paddingHeight,
+          InputWidget(
+            hint: '请输入账号',
+            onChanged: (text) {
+              username = text;
+              _checkInput();
+            },
+          ),
+          40.paddingHeight,
+          InputWidget(
+            hint: '请输入密码',
+            obscureText: true,
+            onChanged: (text) {
+              password = text;
+              _checkInput();
+            },
+          ),
+          45.paddingHeight,
+          ButtonWidget(
+            title: '登陆',
+            enable: loginEnable,
+            onPressed: () => _login(context),
+          ),
+          15.paddingHeight,
           Align(
             alignment: Alignment.centerRight,
             child: InkWell(
@@ -97,12 +107,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // todo 
+  // todo
   void _jumpRegistration() async {}
-  
+
   void _checkInput() {
     bool enable;
-    if(isNotEmpty(username) && isNotEmpty(password)) {
+    if (isNotEmpty(username) && isNotEmpty(password)) {
       enable = true;
     } else {
       enable = false;
@@ -111,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       loginEnable = enable;
     });
   }
-  
+
   // todo
   _login(BuildContext context) {}
 }
