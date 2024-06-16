@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chat_message/models/message_model.dart';
+import 'package:chat_message/widgets/default_message_widget.dart';
 import 'package:flutter/widgets.dart';
 
 class ChatController extends IChatController {
@@ -8,12 +9,16 @@ class ChatController extends IChatController {
   final List<MessageModel> initialMessageList;
   final ScrollController scrollController;
 
+  // Privide MessageWidgetBuilder to customize your bubble style
+  final MessageWidgetBuilder? messageWidgetBuilder;
+
   // 展示时间的间隔，单位秒
   final int timePellet;
   List<int> pelletShow = [];
 
   ChatController(
-      {required this.initialMessageList,
+      {this.messageWidgetBuilder,
+      required this.initialMessageList,
       required this.scrollController,
       required this.timePellet}) {
     for (var message in initialMessageList.reversed) {
@@ -50,32 +55,32 @@ class ChatController extends IChatController {
 
   @override
   void loadMoreData(List<MessageModel> messageList) {
-     // List反转后列是从下往上展示，所以消息顺序也需要反转
-     messageList = List.from(messageList.reversed);
-     List<MessageModel> tempList = [...initialMessageList, ...messageList];
-     // clear record and redo
-     pelletShow.clear();
-     // 时间的标记从最久的消息开始标
-     for(var message in tempList) {
+    // List反转后列是从下往上展示，所以消息顺序也需要反转
+    messageList = List.from(messageList.reversed);
+    List<MessageModel> tempList = [...initialMessageList, ...messageList];
+    // clear record and redo
+    pelletShow.clear();
+    // 时间的标记从最久的消息开始标
+    for (var message in tempList) {
       inflateMessage(message);
-     }
-     initialMessageList.clear();
-     initialMessageList.addAll(tempList);
-     if(messageStreamController.isClosed) return;
-     messageStreamController.sink.add(initialMessageList);
-
+    }
+    initialMessageList.clear();
+    initialMessageList.addAll(tempList);
+    if (messageStreamController.isClosed) return;
+    messageStreamController.sink.add(initialMessageList);
   }
 
   void scrollToLastMessage() {
     // fix scrollController not attached to any scroll views
-    if(!scrollController.hasClients) return;
-    scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    if (!scrollController.hasClients) return;
+    scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
-  
+
   /// 设置消息的时间是否可以展示
   void inflateMessage(MessageModel message) {
     int pellet = (message.createdAt / (timePellet * 1000)).truncate();
-    if(!pelletShow.contains(pellet)) {
+    if (!pelletShow.contains(pellet)) {
       pelletShow.add(pellet);
       message.showCreatedTime = true;
     } else {

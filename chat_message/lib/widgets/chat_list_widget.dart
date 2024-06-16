@@ -7,8 +7,15 @@ class ChatList extends StatefulWidget {
   /// ChatList 的控制器
   final ChatController chatController;
   final EdgeInsetsGeometry? padding;
+  final OnBubbleClick? onBubbleTap;
+  final OnBubbleClick? onBubbleLongPress;
 
-  const ChatList({super.key, required this.chatController, this.padding});
+  const ChatList(
+      {super.key,
+      required this.chatController,
+      this.padding,
+      this.onBubbleTap,
+      this.onBubbleLongPress});
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -16,6 +23,10 @@ class ChatList extends StatefulWidget {
 
 class _ChatListState extends State<ChatList> {
   ChatController get chatController => widget.chatController;
+
+  MessageWidgetBuilder? get messageWidgetBuilder =>
+      widget.chatController.messageWidgetBuilder;
+
   ScrollController get scrollController => chatController.scrollController;
 
   Widget get _chatStreamBuilder => StreamBuilder(
@@ -31,8 +42,13 @@ class _ChatListState extends State<ChatList> {
                 itemCount: snapshot.data?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
                   var model = snapshot.data![index];
-                  // todo
-                  return DefaultMessageWidget(key: model.key, message: model);
+                  return DefaultMessageWidget(
+                    key: model.key,
+                    message: model,
+                    messageWidget: messageWidgetBuilder,
+                    onBubbleLongPress: widget.onBubbleLongPress,
+                    onBubbleTap: widget.onBubbleTap,
+                  );
                 })
             : const Center(
                 child: CircularProgressIndicator(),

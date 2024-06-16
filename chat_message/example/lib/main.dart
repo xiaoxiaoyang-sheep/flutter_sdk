@@ -1,6 +1,7 @@
 import 'package:chat_message/core/chat_controller.dart';
 import 'package:chat_message/models/message_model.dart';
 import 'package:chat_message/widgets/chat_list_widget.dart';
+import 'package:chat_message/widgets/default_message_widget.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -64,6 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
                 child: ChatList(
               chatController: chatController,
+              onBubbleLongPress: (MessageModel message, BuildContext context) {
+                debugPrint('onBubbleLongPress:${message.content}');
+              },
+              onBubbleTap: (MessageModel message, BuildContext context) {
+                debugPrint('onBubbleTap:${message.content}');
+              },
             )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -85,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     chatController = ChatController(
         initialMessageList: _messageList,
+        // messageWidgetBuilder: _diyMessageWidget,
         scrollController: ScrollController(),
         timePellet: 60);
   }
@@ -125,5 +133,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ownerName: 'Imooc'),
     ];
     chatController.loadMoreData(messageList);
+  }
+
+  Widget _diyMessageWidget(MessageModel message) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      padding: const EdgeInsets.only(top: 30, bottom: 30),
+      decoration: BoxDecoration(
+          color: message.ownerType == OwnerType.receiver
+              ? Colors.redAccent
+              : Colors.amberAccent),
+      child: Text('${message.ownerName}: ${message.content}'),
+    );
   }
 }
