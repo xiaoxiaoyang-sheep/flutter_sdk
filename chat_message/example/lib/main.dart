@@ -71,7 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(onPressed: _send, child: const Text('Send'))
               ],
             ),
-            const SizedBox(height: 20,)
+            const SizedBox(
+              height: 20,
+            )
           ],
         ));
   }
@@ -80,7 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     chatController = ChatController(
-        initialMessageList: _messageList, scrollController: ScrollController());
+        initialMessageList: _messageList,
+        scrollController: ScrollController(),
+        timePellet: 60);
   }
 
   void _send() {

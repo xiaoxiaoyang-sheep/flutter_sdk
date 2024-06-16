@@ -8,8 +8,18 @@ class ChatController extends IChatController {
   final List<MessageModel> initialMessageList;
   final ScrollController scrollController;
 
+  // 展示时间的间隔，单位秒
+  final int timePellet;
+  List<int> pelletShow = [];
+
   ChatController(
-      {required this.initialMessageList, required this.scrollController});
+      {required this.initialMessageList,
+      required this.scrollController,
+      required this.timePellet}) {
+    for (var message in initialMessageList.reversed) {
+      inflateMessage(message);
+    }
+  }
 
   StreamController<List<MessageModel>> messageStreamController =
       StreamController();
@@ -31,6 +41,7 @@ class ChatController extends IChatController {
   @override
   void addMessage(MessageModel message) {
     if (messageStreamController.isClosed) return;
+    inflateMessage(message);
     // List反转后列是从下往上展示，所以新来的消息需要插入到数据第0个位置
     initialMessageList.insert(0, message);
     messageStreamController.sink.add(initialMessageList);
@@ -44,6 +55,17 @@ class ChatController extends IChatController {
 
   void scrollToLastMessage() {
     // todo
+  }
+  
+  /// 设置消息的时间是否可以展示
+  void inflateMessage(MessageModel message) {
+    int pellet = (message.createdAt / (timePellet * 1000)).truncate();
+    if(!pelletShow.contains(pellet)) {
+      pelletShow.add(pellet);
+      message.showCreatedTime = true;
+    } else {
+      message.showCreatedTime = false;
+    }
   }
 }
 

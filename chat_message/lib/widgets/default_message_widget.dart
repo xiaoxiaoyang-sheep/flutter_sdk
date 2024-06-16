@@ -1,5 +1,6 @@
 import 'package:bubble/bubble.dart';
 import 'package:chat_message/models/message_model.dart';
+import 'package:chat_message/utils/wechat_date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -57,7 +58,15 @@ class DefaultMessageWidget extends StatelessWidget {
     Widget content = message.ownerType == OwnerType.receiver
         ? _buildReceiver(context)
         : _buildSender(context);
-    return content;
+    return Column(
+      children: [
+        if(message.showCreatedTime) _buildCreatedTime(),
+        Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: content,
+        )
+      ],
+    );
   }
 
   _buildReceiver(BuildContext context) {
@@ -108,6 +117,14 @@ class DefaultMessageWidget extends StatelessWidget {
           fontSize: fontSize,
           color: textColor ?? Colors.black,
           fontFamily: fontFamily),
+    );
+  }
+  
+  _buildCreatedTime() {
+    String showT = WechatDateFormat.format(message.createdAt,dayOnly: false);
+    return Container(
+      padding: const EdgeInsets.only(top: 15),
+      child: Text(showT),
     );
   }
 }
