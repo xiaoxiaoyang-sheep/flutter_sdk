@@ -68,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                ElevatedButton(
+                    onPressed: _loadMore, child: const Text('LoadMore')),
                 ElevatedButton(onPressed: _send, child: const Text('Send'))
               ],
             ),
@@ -105,5 +107,23 @@ class _MyHomePageState extends State<MyHomePage> {
           avatar: 'http://o.devio.org/images/o_as/avatar/tx2.jpeg',
           ownerName: 'ChatGPT'));
     });
+  }
+
+  void _loadMore() {
+    final List<MessageModel> messageList = [
+      MessageModel(
+          ownerType: OwnerType.sender,
+          content: 'hello ${count++}',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          avatar: 'http://o.devio.org/images/o_as/avatar/tx2.jpeg',
+          ownerName: 'Imooc'),
+      MessageModel(
+          ownerType: OwnerType.sender,
+          content: 'hello ${count++}',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          avatar: 'http://o.devio.org/images/o_as/avatar/tx2.jpeg',
+          ownerName: 'Imooc'),
+    ];
+    chatController.loadMoreData(messageList);
   }
 }

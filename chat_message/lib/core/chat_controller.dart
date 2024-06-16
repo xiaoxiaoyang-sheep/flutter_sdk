@@ -50,11 +50,26 @@ class ChatController extends IChatController {
 
   @override
   void loadMoreData(List<MessageModel> messageList) {
-    // TODO: implement loadMoreData
+     // List反转后列是从下往上展示，所以消息顺序也需要反转
+     messageList = List.from(messageList.reversed);
+     List<MessageModel> tempList = [...initialMessageList, ...messageList];
+     // clear record and redo
+     pelletShow.clear();
+     // 时间的标记从最久的消息开始标
+     for(var message in tempList) {
+      inflateMessage(message);
+     }
+     initialMessageList.clear();
+     initialMessageList.addAll(tempList);
+     if(messageStreamController.isClosed) return;
+     messageStreamController.sink.add(initialMessageList);
+
   }
 
   void scrollToLastMessage() {
-    // todo
+    // fix scrollController not attached to any scroll views
+    if(!scrollController.hasClients) return;
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
   
   /// 设置消息的时间是否可以展示
