@@ -20,24 +20,28 @@ class ChatController extends IChatController {
   }
 
   void widgetReady() {
-    if(!messageStreamController.isClosed) {
+    if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
     }
-    if(initialMessageList.isNotEmpty) {
+    if (initialMessageList.isNotEmpty) {
       scrollToLastMessage();
     }
   }
 
   @override
   void addMessage(MessageModel message) {
-    // TODO: implement addMessage
+    if (messageStreamController.isClosed) return;
+    // List反转后列是从下往上展示，所以新来的消息需要插入到数据第0个位置
+    initialMessageList.insert(0, message);
+    messageStreamController.sink.add(initialMessageList);
+    scrollToLastMessage();
   }
 
   @override
   void loadMoreData(List<MessageModel> messageList) {
     // TODO: implement loadMoreData
   }
-  
+
   void scrollToLastMessage() {
     // todo
   }
