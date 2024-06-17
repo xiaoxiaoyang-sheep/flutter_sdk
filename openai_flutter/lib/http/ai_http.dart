@@ -28,6 +28,7 @@ class AiHttp {
 
     IOClient myClient = IOClient(httpClient);
     final http.Response response = await myClient.post(Uri.parse(url),
+        headers: AiConfigBuilder.instance.headers(),
         body: body != null ? jsonEncode(body) : null);
     AiLogger.log(
         'request to $url finished with status code: $response.statusCode}');
