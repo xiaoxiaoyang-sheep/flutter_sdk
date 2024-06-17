@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/io_client.dart';
+import 'package:openai_flutter/http/ai_config.dart';
 import 'package:openai_flutter/http/ai_exception.dart';
 import 'package:openai_flutter/utils/ai_logger.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,18 @@ class AiHttp {
       required T Function(Map<String, dynamic>) onSuccess,
       Map<String, dynamic>? body}) async {
     AiLogger.log('starting request to $url');
+
+    /// 借助HtttpClient来发送请求
     HttpClient httpClient = HttpClient();
+
+    /// 设置代理
+    var proxy = AiConfigBuilder.instance.proxy;
+    if (proxy != null && proxy.trim().isNotEmpty) {
+      httpClient.findProxy = (uri) {
+        return "PROXY $proxy";
+      };
+    }
+
     IOClient myClient = IOClient(httpClient);
     final http.Response response = await myClient.post(Uri.parse(url),
         body: body != null ? jsonEncode(body) : null);
